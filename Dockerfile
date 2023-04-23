@@ -23,6 +23,8 @@ RUN \
   m4 \
   bash \
   gmp-dev \
+  zsh\
+  curl
   linux-headers
 
 RUN \
@@ -36,6 +38,7 @@ ENV \
   LIBABISUFFIX=""
 
 RUN \
-  cd /usr/pkgsrc/bootstrap && ./bootstrap
-
+  cd /usr/pkgsrc/bootstrap && ./bootstrap \
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  
 COPY mk.conf /usr/pkg/etc/
