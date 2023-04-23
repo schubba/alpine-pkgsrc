@@ -19,17 +19,20 @@ RUN \
   file \
   wget \
   git \
+  cvs \
   rsync \
   m4 \
   bash \
   gmp-dev \
-  zsh\
-  curl
+  openssh \
+  curl \
   linux-headers
 
 RUN \
-  cd /usr && \
-  git clone https://github.com/jsonn/pkgsrc.git 
+      mkdir -p ~/.ssh && \
+      ssh-keyscan -H anoncvs.NetBSD.org > ~/.ssh/known_hosts && \
+      cd /usr && \
+      cvs -q -z2 -d anoncvs@anoncvs.NetBSD.org:/cvsroot checkout -P pkgsrc
 
 ENV \
   PATH=/usr/pkg/bin:$PATH \
@@ -38,7 +41,6 @@ ENV \
   LIBABISUFFIX=""
 
 RUN \
-  cd /usr/pkgsrc/bootstrap && ./bootstrap \
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  cd /usr/pkgsrc/bootstrap && ./bootstrap 
   
 COPY mk.conf /usr/pkg/etc/
